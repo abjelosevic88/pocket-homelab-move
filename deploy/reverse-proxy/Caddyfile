@@ -1,0 +1,5 @@
+# Pocket Move behind Caddy. Homepage widgets and linked apps send their own
+# bearer token to /api/*.
+move.example.com {
+	reverse_proxy pocket-move:8080
+}
