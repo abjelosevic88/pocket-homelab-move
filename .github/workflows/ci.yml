@@ -27,7 +27,7 @@ jobs:
           sleep 2
           curl -fsS http://localhost:8080/healthz
           curl -fsS http://localhost:8080/api/v1/in | grep -q google-takeout
-          curl -fsS http://localhost:8080/api/v1/out | grep -q pocket-move
+          curl -fsS http://localhost:8080/api/v1/out | grep -q '"status":"done"'
           curl -fsS http://localhost:8080/ | grep -q '<div id="root">'
   docker:
     runs-on: ubuntu-latest
