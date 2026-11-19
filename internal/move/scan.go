@@ -610,6 +610,9 @@ type ManifestFile struct {
 	SHA256 string `json:"sha256"`
 }
 
+// roundTrip are open formats an app may use as its whole copy.
+var roundTrip = map[string]bool{KindVCard: true, KindICalEvents: true, KindICalTodos: true, KindMarkdownZip: true, KindOPMLFeeds: true, KindOPMLPodcast: true}
+
 func scanPocketMove(fs *Fileset) (*Result, bool) {
 	var man Entry
 	found := false
@@ -647,9 +650,19 @@ func scanPocketMove(fs *Fileset) (*Result, bool) {
 				break
 			}
 		}
+		kind := KindPocket
+		if pick == nil {
+			// apps whose full copy is an open format (Calendar's .ics, Contacts' .vcf) go back through it
+			for i, f := range a.Files {
+				if roundTrip[f.Kind] {
+					pick, kind = &a.Files[i], f.Kind
+					break
+				}
+			}
+		}
 		if pick == nil {
 			if len(a.Files) > 0 {
-				res.Notes = append(res.Notes, a.Name+": the archive has only open-format files, nothing to bring back in.")
+				res.Notes = append(res.Notes, a.Name+": the archive has no copy this app takes back.")
 			}
 			continue
 		}
@@ -658,7 +671,7 @@ func scanPocketMove(fs *Fileset) (*Result, bool) {
 			res.Notes = append(res.Notes, a.Name+": "+pick.Path+" is missing from the archive.")
 			continue
 		}
-		res.Found = append(res.Found, Found{Label: a.Name, Detail: pick.Title, Kind: KindPocket, Prefer: a.App, FileName: path.Base(pick.Path),
+		res.Found = append(res.Found, Found{Label: a.Name, Detail: pick.Title, Kind: kind, Prefer: a.App, FileName: path.Base(pick.Path),
 			Write: func(w io.Writer) error { return copyEntry(w, e) }})
 	}
 	return res, true

@@ -231,14 +231,15 @@ func TestPocketMoveArchive(t *testing.T) {
 		"pocket-move-2026-11-19-1/notes/notes.zip":       "zipbytes",
 		"pocket-move-2026-11-19-1/calendar/calendar.ics": "BEGIN:VCALENDAR\nEND:VCALENDAR",
 	})
-	if res.Source != "pocket-move" || len(res.Found) != 1 || res.Found[0].Prefer != "notes" || res.Found[0].Kind != KindPocket {
+	if res.Source != "pocket-move" || len(res.Found) != 2 || res.Found[0].Prefer != "notes" || res.Found[0].Kind != KindPocket {
 		t.Fatalf("%+v", res)
 	}
 	if string(render(t, &res.Found[0])) != "zipbytes" {
 		t.Error("wrong file")
 	}
-	if len(res.Notes) != 1 {
-		t.Errorf("notes %v", res.Notes)
+	// Calendar's whole copy is its .ics: it goes back through the iCalendar import
+	if res.Found[1].Prefer != "calendar" || res.Found[1].Kind != KindICalEvents {
+		t.Errorf("calendar %+v", res.Found[1])
 	}
 }
 
