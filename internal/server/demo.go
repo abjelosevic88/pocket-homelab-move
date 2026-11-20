@@ -61,7 +61,7 @@ func (demoLinks) States(ctx context.Context, email string) (map[string][2]linkSt
 	out := map[string][2]linkState{}
 	for _, a := range pocketApps {
 		d, ok := demoApps[a.Slug]
-		if !ok {
+		if !ok || !movable[a.Slug] {
 			d = demoApp{out: "not_offered", in: "not_offered"}
 		}
 		st := func(v string) linkState {

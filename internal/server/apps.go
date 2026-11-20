@@ -73,10 +73,22 @@ func appName(slug string) string {
 	return slug
 }
 
-// linkUses asks for move:export and move:import in every app.
+// movable are the apps that declare Pocket Core's Portable (move:export /
+// move:import). Move asks Core for links only in these, so the apps still
+// waiting for that update don't show as broken links in Core; add an app
+// here when it adopts Portable.
+var movable = map[string]bool{
+	"bookshelf": true, "calendar": true, "contacts": true, "day": true, "files": true, "money": true,
+	"movement": true, "notes": true, "places": true, "podcasts": true, "reader": true, "tasks": true,
+}
+
+// linkUses asks for move:export and move:import in every app that can move.
 func linkUses() []core.Use {
-	out := make([]core.Use, 0, len(pocketApps))
+	out := make([]core.Use, 0, len(movable))
 	for _, a := range pocketApps {
+		if !movable[a.Slug] {
+			continue
+		}
 		out = append(out, core.Use{App: a.Slug, Scopes: []string{core.ScopeMoveExport, core.ScopeMoveImport},
 			Reason: "Copy your data out of " + a.Name + " into one archive, and bring data in from other apps and other boxes"})
 	}

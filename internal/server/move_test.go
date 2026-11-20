@@ -326,10 +326,15 @@ func TestLinkTokensReachNothing(t *testing.T) {
 	}
 }
 
-func TestUsesAskForBothScopesEverywhere(t *testing.T) {
+func TestUsesOnlyInAppsThatCanMove(t *testing.T) {
 	uses := linkUses()
-	if len(uses) != len(pocketApps) {
-		t.Fatal("not every app")
+	if len(uses) != len(movable) {
+		t.Fatalf("%d uses for %d movable apps", len(uses), len(movable))
+	}
+	for slug := range movable {
+		if _, ok := appBySlug(slug); !ok {
+			t.Errorf("movable %q is not a known app", slug)
+		}
 	}
 	for _, u := range uses {
 		if u.App == "move" || len(u.Scopes) != 2 {

@@ -42,7 +42,12 @@ func (s *Server) appViews(ctx context.Context, email string) ([]appView, error) 
 	views := make([]appView, 0, len(pocketApps))
 	for _, a := range pocketApps {
 		pair, ok := states[a.Slug]
-		if !ok {
+		switch {
+		case !movable[a.Slug]:
+			// not asked for in Core yet: the app needs its Portable update first
+			ns := linkState{State: "not_offered", Reason: linkReason(a.Name, "not_offered")}
+			pair = [2]linkState{ns, ns}
+		case !ok:
 			pair = [2]linkState{{State: "not_declared", Reason: linkReason(a.Name, "not_declared")}, {State: "not_declared", Reason: linkReason(a.Name, "not_declared")}}
 		}
 		views = append(views, appView{pocketApp: a, Out: pair[0], In: pair[1], Exports: []core.PortableExport{}, Imports: []core.PortableImport{}})
