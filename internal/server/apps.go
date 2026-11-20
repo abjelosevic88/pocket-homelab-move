@@ -89,12 +89,17 @@ var movable = map[string]bool{
 	"weather": true, "whiteboard": true, "wishlist": true,
 	"clips": true, "crm": true, "database": true, "documents": true, "draw": true, "errors": true,
 	"family": true, "fitness": true, "flows": true, "forms": true, "forum": true,
+	"gamebuilder": true, "games": true, "garage": true, "guitar": true, "habits": true, "health": true,
+	"home": true, "horoscope": true, "inventory": true, "invoicing": true, "jam": true,
+	"sky": true, "slides": true, "sphere": true, "split": true, "still": true, "tables": true,
+	"time": true, "trails": true, "translate": true,
 }
 
 // nothingToMove are apps that keep nothing of a person's own to move, and why.
 var nothingToMove = map[string]string{
-	"photos": "your photos stay in Immich; Pocket Photos keeps only its connections",
-	"vault":  "your vault is encrypted on your devices: export and import it in the Bitwarden apps",
+	"photos":    "your photos stay in Immich; Pocket Photos keeps only its connections",
+	"vault":     "your vault is encrypted on your devices: export and import it in the Bitwarden apps",
+	"subtitles": "it keeps the box's subtitles in time, nothing of yours",
 }
 
 // linkUses asks for move:export and move:import in every app that can move.
