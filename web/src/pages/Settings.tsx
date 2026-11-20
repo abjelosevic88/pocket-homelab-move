@@ -148,8 +148,9 @@ function Apps() {
   if (error) return <div className="callout danger"><Icon name="alert" size={15} /><span>{error}</span></div>
   if (!data) return <Loading />
   const ready = data.apps.filter(a => a.out.on || a.in.on)
-  const waiting = data.apps.filter(a => !a.out.on && !a.in.on && a.out.state !== 'not_offered' && a.out.state !== 'target_missing')
+  const waiting = data.apps.filter(a => !a.out.on && !a.in.on && a.out.state !== 'not_offered' && a.out.state !== 'target_missing' && a.out.state !== 'nothing_to_move')
   const later = data.apps.filter(a => a.out.state === 'not_offered')
+  const nothing = data.apps.filter(a => a.out.state === 'nothing_to_move')
   return (
     <div className="stack loose">
       {data.error && <div className="callout danger"><Icon name="alert" size={15} /><span>{data.error}</span></div>}
@@ -160,6 +161,9 @@ function Apps() {
       </Section>
       {waiting.length > 0 && <Section title={`Switched off (${waiting.length})`} icon="x-circle" sub="These apps can move, but the switch is off.">
         <div className="mv-linklist">{waiting.map(a => <LinkRow key={a.slug} a={a} />)}</div>
+      </Section>}
+      {nothing.length > 0 && <Section title={`Nothing to move (${nothing.length})`} icon="minus" sub="These apps keep nothing of yours that Move could carry.">
+        <div className="mv-linklist">{nothing.map(a => <div key={a.slug} className="mv-linkrow"><span className="grow">{a.name}</span><span className="muted small">{a.out.reason}</span></div>)}</div>
       </Section>}
       {later.length > 0 && <Section title={`Not yet (${later.length})`} icon="hourglass" sub="These apps need an update before Move can reach them.">
         <p className="muted small">{later.map(a => a.name.replace(/^Pocket /, '')).join(', ')}</p>

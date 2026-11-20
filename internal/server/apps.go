@@ -80,6 +80,15 @@ func appName(slug string) string {
 var movable = map[string]bool{
 	"bookshelf": true, "calendar": true, "contacts": true, "day": true, "files": true, "money": true,
 	"movement": true, "notes": true, "places": true, "podcasts": true, "reader": true, "tasks": true,
+	// 2026-11-20
+	"music": true, "office": true, "network": true, "nutrition": true, "parcels": true, "pets": true,
+	"photolab": true, "printfarm": true, "projects": true, "pr-review": true,
+}
+
+// nothingToMove are apps that keep nothing of a person's own to move, and why.
+var nothingToMove = map[string]string{
+	"photos": "your photos stay in Immich; Pocket Photos keeps only its connections",
+	"vault":  "your vault is encrypted on your devices: export and import it in the Bitwarden apps",
 }
 
 // linkUses asks for move:export and move:import in every app that can move.

@@ -29,7 +29,7 @@ export default function MovingOut() {
   }, [list, loadList])
 
   const ready = useMemo(() => (apps?.apps || []).filter(a => a.out.on && !a.error && a.exports.length > 0), [apps])
-  const notReady = useMemo(() => (apps?.apps || []).filter(a => !(a.out.on && !a.error && a.exports.length > 0) && a.out.state !== 'not_offered' && a.out.state !== 'target_missing'), [apps])
+  const notReady = useMemo(() => (apps?.apps || []).filter(a => !(a.out.on && !a.error && a.exports.length > 0) && a.out.state !== 'not_offered' && a.out.state !== 'target_missing' && a.out.state !== 'nothing_to_move'), [apps])
   const later = useMemo(() => (apps?.apps || []).filter(a => a.out.state === 'not_offered'), [apps])
   useEffect(() => { if (apps && !picked) setPicked(new Set(ready.map(a => a.slug))) }, [apps, ready, picked])
 

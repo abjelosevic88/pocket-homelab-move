@@ -43,6 +43,9 @@ func (s *Server) appViews(ctx context.Context, email string) ([]appView, error) 
 	for _, a := range pocketApps {
 		pair, ok := states[a.Slug]
 		switch {
+		case nothingToMove[a.Slug] != "":
+			ns := linkState{State: "nothing_to_move", Reason: nothingToMove[a.Slug]}
+			pair = [2]linkState{ns, ns}
 		case !movable[a.Slug]:
 			// not asked for in Core yet: the app needs its Portable update first
 			ns := linkState{State: "not_offered", Reason: linkReason(a.Name, "not_offered")}
