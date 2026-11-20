@@ -83,6 +83,8 @@ var movable = map[string]bool{
 	// 2026-11-20
 	"music": true, "office": true, "network": true, "nutrition": true, "parcels": true, "pets": true,
 	"photolab": true, "printfarm": true, "projects": true, "pr-review": true,
+	"puzzlecraft": true, "quest": true, "radio": true, "remote": true, "renewals": true, "rentals": true,
+	"requests": true, "review": true, "rooms": true, "search": true, "sign": true,
 }
 
 // nothingToMove are apps that keep nothing of a person's own to move, and why.
