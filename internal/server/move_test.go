@@ -337,7 +337,11 @@ func TestUsesOnlyInAppsThatCanMove(t *testing.T) {
 		}
 	}
 	for _, u := range uses {
-		if u.App == "move" || len(u.Scopes) != 2 {
+		want := 2
+		if copyOutOnly[u.App] != "" {
+			want = 1
+		}
+		if u.App == "move" || len(u.Scopes) != want || u.Scopes[0] != core.ScopeMoveExport {
 			t.Errorf("use %+v", u)
 		}
 	}

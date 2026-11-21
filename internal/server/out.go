@@ -53,6 +53,9 @@ func (s *Server) appViews(ctx context.Context, email string) ([]appView, error) 
 		case !ok:
 			pair = [2]linkState{{State: "not_declared", Reason: linkReason(a.Name, "not_declared")}, {State: "not_declared", Reason: linkReason(a.Name, "not_declared")}}
 		}
+		if why := copyOutOnly[a.Slug]; why != "" && pair[0].State != "nothing_to_move" {
+			pair[1] = linkState{State: "copy_out_only", Reason: a.Name + " only copies out: " + why}
+		}
 		views = append(views, appView{pocketApp: a, Out: pair[0], In: pair[1], Exports: []core.PortableExport{}, Imports: []core.PortableImport{}})
 	}
 	var wg sync.WaitGroup

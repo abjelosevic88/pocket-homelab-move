@@ -178,7 +178,7 @@ function LinkRow({ a }: { a: AppsResponse['apps'][number] }) {
     <div className="mv-linkrow">
       <span className="grow">{a.name}</span>
       {chip(a.out.on, 'copy out', a.out.reason)}
-      {chip(a.in.on, 'bring in', a.in.reason)}
+      {a.in.state === 'copy_out_only' ? <span className="muted small" title={a.in.reason}>copy out only</span> : chip(a.in.on, 'bring in', a.in.reason)}
     </div>
   )
 }

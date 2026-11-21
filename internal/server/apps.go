@@ -108,11 +108,24 @@ var nothingToMove = map[string]string{
 	"monitoring": "it watches the server, nothing of yours",
 }
 
-// linkUses asks for move:export and move:import in every app that can move.
+// copyOutOnly are movable apps that only give (no Portable Imports), and why.
+// Move asks Core only for move:export in them, so Core doesn't show a
+// move:import link that the app never offers as broken.
+var copyOutOnly = map[string]string{
+	"invoicing": "invoices are numbered and sent from this box, so they are copied out, not brought in",
+}
+
+// linkUses asks for move:export in every app that can move, and move:import
+// in those that also take data in.
 func linkUses() []core.Use {
 	out := make([]core.Use, 0, len(movable))
 	for _, a := range pocketApps {
 		if !movable[a.Slug] {
+			continue
+		}
+		if copyOutOnly[a.Slug] != "" {
+			out = append(out, core.Use{App: a.Slug, Scopes: []string{core.ScopeMoveExport},
+				Reason: "Copy your data out of " + a.Name + " into one archive"})
 			continue
 		}
 		out = append(out, core.Use{App: a.Slug, Scopes: []string{core.ScopeMoveExport, core.ScopeMoveImport},
